@@ -5,6 +5,7 @@ import { Row, Col, Card, Button } from 'react-bootstrap'
 const Home = ({ marketplace, nft }) => {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
+
   const loadMarketplaceItems = async () => {
     // Load all unsold items
     const itemCount = await marketplace.itemCount()
@@ -15,8 +16,9 @@ const Home = ({ marketplace, nft }) => {
         // get uri url from nft contract
         const uri = await nft.tokenURI(item.tokenId)
         // use uri to fetch the nft metadata stored on ipfs 
-        const response = await fetch(uri)
-        const metadata = await response.json()
+        const response = await fetch(uri, { method: "GET", mode: "no-cors" })
+        console.log(response)
+        const metadata = response.json()
         // get total price of item (item price + fee)
         const totalPrice = await marketplace.getTotalPrice(item.itemId)
         // Add item to items array
